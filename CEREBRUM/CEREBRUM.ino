@@ -1,29 +1,31 @@
-#include "Rod.h"
-
-Rod rod2(B10010000); 
-Rod rod3(B00000000);
+#include "Stack.h"
+Rod greenBlocked(B01010000);
+Rod blueOkay(B00101000);
+Rod blueBlocked(B00110000);
 
 void setup() {
 
   Serial.begin(9600);
   Serial.println("Starting algorithm...");
 
-}
+  }
 
 void loop() {
-  
-  Serial.println("FIRST ROD....");
+	greenBlocked.setNextRod(blueOkay);
+	blueOkay.setNextRod(blueBlocked);
 
-  rod2.printRod();
-  if(rod2.isBlocked()){
-  	Serial.println("BLOCKEEEED");
-  }
-  
-  Serial.println("SECOND ROD....");
+	greenBlocked.printRod();
+	greenBlocked.isTopOf();
 
-  rod3.printRod();
-  if(rod3.isBlocked()){
-  	Serial.println("BLOCKEEEED");
-  }
+	delay(1000);
 
+	blueOkay.printRod();
+	blueOkay.isTopOf();
+
+	delay(1000);
+
+	blueBlocked.printRod();
+	blueBlocked.isTopOf();
+
+	delay(20000);
 }

@@ -528,5 +528,10 @@ const byte green = B01000000;
 const byte blue = B00100000;
 
 const byte blocked = B00010000;
+const byte pickedUp = B00001000;
+
+// Masks for stacks
+
+const byte stackEmpty = B00000100;
 
 #endif

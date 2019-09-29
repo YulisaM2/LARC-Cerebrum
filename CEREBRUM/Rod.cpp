@@ -18,7 +18,7 @@ byte Rod::getStatus(){
 	return status;
 };
 
-void Rod::setNextRod(Rod rod){
+void Rod::setNextRod(Rod &rod){
 	nextRod = &rod;
 };
 
@@ -69,7 +69,8 @@ void Rod::printRod(){
 		}else if(status == (blue | pickedUp)){
 			Serial.println("Blue unblocked PICKED");
 		}else{
-			Serial.println("Error: Invalid combination");
+			Serial.println("Error: Invalid combination: ");
+			Serial.println(status);
 		}
 
 	}
@@ -98,7 +99,7 @@ bool Rod::wasPickedUp(){
 	return check != 0;
 };
 
-void Rod::rodPickedUp(){
+void Rod::pickedUpRod(){
 	if(!wasPickedUp()){
 		status = status | pickedUp;
 	}

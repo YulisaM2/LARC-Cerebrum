@@ -531,8 +531,27 @@ const byte blocked = B00010000;
 const byte pickedUp = B00001000;
 
 // Masks for stacks
-
 const byte stackEmpty = B00000100;
 const byte mapEmpty = B00000100;
 
+// Masks for the robot
+const byte elevatorAtRight = B00000000;
+const byte elevatorAtLeft = B00000001;
+
+// Masks for the paths
+const byte pathToPosition1 = B00000001;
+const byte pathToPosition2 = B00000010;
+const byte pathToPosition3 = B00000011;
+const byte pathToPosition4 = B00000100;
+const byte pathToPosition5 = B00000101;
+const byte pathToPosition6 = B00000110;
+const byte pathToPosition7 = B00000111;
+const byte pathToPosition8 = B00001000;
+const byte pathToPosition9 = B00001001;
+const byte pathToPosition10 = B00001010;
+const byte pathToPosition11 = B00001011;
+const byte pathToPosition12 = B00001100;
+
+const byte pathToButton = B01000000;
+const byte pathForPictures = B10000000;
 #endif

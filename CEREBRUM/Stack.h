@@ -28,7 +28,7 @@ class Stack{
 
 		void copyStack(const Stack &original); 
 
-		void printStack(); // hardocded, for debugging mode
+		void printStack(); // hardcded, for debugging mode
 		void printOrder(); // using current top rod as start, for debugging mode
 	private:
 		Rod stack[4];

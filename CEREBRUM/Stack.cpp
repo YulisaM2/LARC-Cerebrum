@@ -1,6 +1,5 @@
 #include "Stack.h"
 
-// Checar si inicializar el arreglo de rods con algun valor default 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Stack::Stack(){
 	stackStatus = 0;
 	topRod = nullptr;

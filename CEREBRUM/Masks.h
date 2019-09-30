@@ -533,5 +533,6 @@ const byte pickedUp = B00001000;
 // Masks for stacks
 
 const byte stackEmpty = B00000100;
+const byte mapEmpty = B00000100;
 
 #endif

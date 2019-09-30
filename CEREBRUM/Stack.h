@@ -26,6 +26,8 @@ class Stack{
 		bool isEmpty();
 		void topRodpickedUp();
 
+		void copyStack(const Stack &original); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		void printStack(); // hardocded, for debugging mode
 		void printOrder(); // using current top rod as start, for debugging mode
 	private:

@@ -3,6 +3,7 @@
 
 #include "Masks.h"
 
+// All the rods must be initialized with values equivalent to unpicked and blocked, unless they are the top rod of the stack or they are red
 class Rod{
 	public:
 		Rod();

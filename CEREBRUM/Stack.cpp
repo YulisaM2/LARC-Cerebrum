@@ -110,7 +110,6 @@ void Stack::topRodpickedUp(){
 
 void Stack::copyStack(const Stack &original){
 	updateStack(original.stack[0].getStatus(),original.stack[1].getStatus(),original.stack[2].getStatus(),original.stack[3].getStatus());
-	Serial.println("NEW TYPE?");
 };
 
 // Both methods won't print anything if first rod is red because of how the constructor was defined (directly marking stack as empty and defining top rod as nullptr)

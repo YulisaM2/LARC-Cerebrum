@@ -1,7 +1,8 @@
 #include "Field.h"
 
 Field::Field(){
-	mapCompleted = 0;
+	// mapCompleted = 0;
+	depositAreasFilled = 0;
 };
 
 Field::UpdateField(Stack one, Stack two, Stack three, Stack four, Stack five, Stack six, Stack seven, Stack eight, Stack nine, Stack ten, Stack eleven, Stack twelve){
@@ -40,14 +41,19 @@ Field::Field(Stack one, Stack two, Stack three, Stack four, Stack five, Stack si
 	UpdateField(one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve);
 };
 
-byte Field::wasMapCompleted(){
-	byte check = mapCompleted & mapEmpty;
-	return check != 0;
+void Field::updateDepositAreasFilled(){
+	++depositAreasFilled;
 };
 
-void Field::setWasCompleted(byte status){
-	mapCompleted = status;
+bool Field::wasMapCompleted(){
+	// byte check = mapCompleted & mapEmpty;
+	// return check != 0;
+	return depositAreasFilled  >= 2;
 };
+
+// void Field::setWasCompleted(byte status){
+// 	mapCompleted = status;
+// };
 
 void Field::printField(){
 	byte num = 1;

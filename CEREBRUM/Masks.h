@@ -532,11 +532,15 @@ const byte pickedUp = B00001000;
 
 // Masks for stacks
 const byte stackEmpty = B00000100;
-const byte mapEmpty = B00000100;
+// const byte mapEmpty = B00000100;
+
+// Masks for the boats
+const byte maxHeight = B00000101;
+const byte boatFilled = B00000001;
 
 // Masks for the robot
-const byte elevatorAtRight = B00000000;
-const byte elevatorAtLeft = B00000001;
+// const byte elevatorAtRight = B00000001;
+// const byte elevatorAtLeft = B00000000;
 
 // Masks for the paths
 const byte pathToPosition1 = B00000001;
@@ -552,6 +556,29 @@ const byte pathToPosition10 = B00001010;
 const byte pathToPosition11 = B00001011;
 const byte pathToPosition12 = B00001100;
 
-const byte pathToButton = B01000000;
+// These are also the positions from which a robot can make a decision
 const byte pathForPictures = B10000000;
+const byte finishedPictures = B10000000;
+
+const byte pathToBoatBlueA = B00001101;
+const byte atBoatBlueA = B00001101;
+
+const byte pathToBoatBlueB = B00001110;
+const byte atBoatBlueB = B00001110;
+
+const byte pathToBoatBlueC = B00001111;
+const byte atBoatBlueC = B00001111;
+
+const byte pathToBoatGreenA = B00010000;
+const byte atBoatGreenA = B00010000;
+
+const byte pathToBoatGreenB = B00010001;
+const byte atBoatGreenB = B00010001;
+
+const byte pathToBoatGreenC = B00010010;
+const byte atBoatGreenC = B00010010;
+
+const byte pathToButton = B01000000;
+const byte atCenter = B01000000;
+
 #endif

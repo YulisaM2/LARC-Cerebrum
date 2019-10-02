@@ -12,6 +12,8 @@ class Rod{
 		void setStatus(byte bStatus);
 		byte getStatus();
 
+		byte getColor();
+
 		void setNextRod(Rod &rod);
 		Rod* getNextRod();
 		
@@ -29,6 +31,5 @@ class Rod{
 	private:
 		byte status; // red green blue blocked pickedUp (1 indicates that that state is true)
 		Rod* nextRod; // to keep track of the following rod on the stack, it will help to know from which rod to pick up next time (instead of iterating throught the whole stack)
-
 };
 #endif

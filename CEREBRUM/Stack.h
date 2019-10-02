@@ -26,6 +26,8 @@ class Stack{
 		bool isEmpty();
 		void topRodpickedUp();
 
+		byte getCurrHeight();
+
 		void copyStack(const Stack &original); 
 
 		void printStack(); // hardcded, for debugging mode
@@ -33,6 +35,7 @@ class Stack{
 	private:
 		Rod stack[4];
 		Rod* topRod; // reference to the rod that is currently at the top (the only one eligible for pickup)
+		byte currHeight; // to check how much does the elevator have to drop 
 		byte stackStatus; // to quickly check if it is empty (B00000100) and not consider it when mapping 
 };
 #endif

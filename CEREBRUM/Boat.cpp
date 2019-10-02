@@ -11,31 +11,48 @@ byte Boat::howManyDepositedAtA(){
 	return depositedAtA;
 };
 
+bool Boat::isAFull(){
+	byte check = depositedAtA & maxHeight;
+	return check != 0;
+};
+
 void Boat::updateDepositedAtA(){
 	++depositedAtA;
-	if(depositedAtA == (maxHeight) && depositedAtB == (maxHeight) && depositedAtC == (maxHeight)){
+	if(isAFull() && isBFull() && isCFull()){
 		boatFull = boatFilled;
 	}
 };
+
 
 byte Boat::howManyDepositedAtB(){
 	return depositedAtB;
 };
 
+bool Boat::isBFull(){
+	byte check = depositedAtB & maxHeight;
+	return check != 0;
+};
+
 void Boat::updateDepositedAtB(){
 	++depositedAtB;
-	if(depositedAtB == (maxHeight) && depositedAtA == (maxHeight) && depositedAtC == (maxHeight)){
+	if(isAFull() && isBFull() && isCFull()){
 		boatFull = boatFilled;
 	}
 };
+
 
 byte Boat::howManyDepositedAtC(){
 	return depositedAtC;
 };
 
+bool Boat::isCFull(){
+	byte check = depositedAtC & maxHeight;
+	return check != 0;
+};
+
 void Boat::updateDepositedAtC(){
 	++depositedAtC;
-	if(depositedAtC == (maxHeight) && depositedAtB == (maxHeight) && depositedAtA == (maxHeight)){
+	if(isAFull() && isBFull() && isCFull()){
 		boatFull = boatFilled;
 	}
 };

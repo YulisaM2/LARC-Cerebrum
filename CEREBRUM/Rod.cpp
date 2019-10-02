@@ -18,6 +18,16 @@ byte Rod::getStatus(){
 	return status;
 };
 
+byte Rod::getColor(){
+	if(status & (green) != 0){
+		return (green);
+	}else if(status & (blue) != 0){
+		return (blue);
+	}else{
+		Serial.println("Color not recognized in class Rod!");
+	}
+}
+
 void Rod::setNextRod(Rod &rod){
 	nextRod = &rod;
 };

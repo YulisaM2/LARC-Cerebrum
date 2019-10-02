@@ -3,6 +3,7 @@
 Stack::Stack(){
 	stackStatus = 0;
 	topRod = nullptr;
+	currHeight = maxHeight - 1;
 };
 
 void Stack::markEmpty(){
@@ -105,8 +106,14 @@ bool Stack::isEmpty(){
 
 void Stack::topRodpickedUp(){	
 	topRod->pickedUpRod();
+	--currHeight;
 	unblockNextRod();
 };
+
+
+byte Stack::getCurrHeight(){
+	return currHeight;
+}
 
 void Stack::copyStack(const Stack &original){
 	updateStack(original.stack[0].getStatus(),original.stack[1].getStatus(),original.stack[2].getStatus(),original.stack[3].getStatus());

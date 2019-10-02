@@ -1,28 +1,45 @@
 #include "Field.h"
 
 Field::Field(){
-	// mapCompleted = 0;
 	depositAreasFilled = 0;
 };
 
 Field::UpdateField(Stack one, Stack two, Stack three, Stack four, Stack five, Stack six, Stack seven, Stack eight, Stack nine, Stack ten, Stack eleven, Stack twelve){
-	map[0][0].copyStack(one);
-	map[1][0].copyStack(two);
+	// map[0][0].copyStack(one);
+	// map[1][0].copyStack(two);
 
-	map[0][1].copyStack(three);
-	map[1][1].copyStack(four);
+	// map[0][1].copyStack(three);
+	// map[1][1].copyStack(four);
 
-	map[0][2].copyStack(five);
-	map[1][2].copyStack(six);
+	// map[0][2].copyStack(five);
+	// map[1][2].copyStack(six);
 
-	map[0][3].copyStack(seven);
-	map[1][3].copyStack(eight);
+	// map[0][3].copyStack(seven);
+	// map[1][3].copyStack(eight);
 
-	map[0][4].copyStack(nine);
-	map[1][4].copyStack(ten);
+	// map[0][4].copyStack(nine);
+	// map[1][4].copyStack(ten);
 
-	map[0][5].copyStack(eleven);
-	map[1][5].copyStack(twelve);
+	// map[0][5].copyStack(eleven);
+	// map[1][5].copyStack(twelve);
+
+	map[0].copyStack(one);
+	map[1].copyStack(two);
+
+	map[2].copyStack(three);
+	map[3].copyStack(four);
+
+	map[4].copyStack(five);
+	map[5].copyStack(six);
+
+	map[6].copyStack(seven);
+	map[7].copyStack(eight);
+
+	map[8].copyStack(nine);
+	map[9].copyStack(ten);
+
+	map[10].copyStack(eleven);
+	map[11].copyStack(twelve);
 };
 
 Field::Field(byte readings[48]){
@@ -46,24 +63,25 @@ void Field::updateDepositAreasFilled(){
 };
 
 bool Field::wasMapCompleted(){
-	// byte check = mapCompleted & mapEmpty;
-	// return check != 0;
-	return depositAreasFilled  >= 2;
+	return depositAreasFilled  >= 2; // we can only stack 30 rods, so we will run out of places where to drop off rods before having the chance of finishing the map
 };
-
-// void Field::setWasCompleted(byte status){
-// 	mapCompleted = status;
-// };
 
 void Field::printField(){
 	byte num = 1;
-	for(byte col = 0; col < 6; ++col){
-		for(byte row = 0; row < 2; ++row){
-			Serial.print("------------------------- NEXT STACK : ");
-			Serial.println(num);
-			++num;
-			map[row][col].printOrder();
-		}
+	// for(byte col = 0; col < 6; ++col){
+	// 	for(byte row = 0; row < 2; ++row){
+	// 		Serial.print("------------------------- NEXT STACK : ");
+	// 		Serial.println(num);
+	// 		++num;
+	// 		map[row][col].printOrder();
+	// 	}
+	// }
+
+	for(byte currStack = 0; currStack < 12; ++currStack){
+		Serial.print("------------------------- NEXT STACK : ");
+		Serial.println(num);
+		++num;
+		map[currStack].printOrder();
 	}
 	Serial.println("------------------------- End of the field!");
 };

@@ -10,12 +10,15 @@ class Boat{
 		Boat();
 
 		byte howManyDepositedAtA();
+		bool isAFull();
 		void updateDepositedAtA();
 
 		byte howManyDepositedAtB();
+		bool isBFull();
 		void updateDepositedAtB();
 
 		byte howManyDepositedAtC();
+		bool isCFull();
 		void updateDepositedAtC();
 
 		bool isBoatFull();

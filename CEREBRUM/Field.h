@@ -22,18 +22,17 @@ class Field{
 		Field(byte readings[48]);
 		
 		Field(Stack one, Stack two, Stack three, Stack four, Stack five, Stack six, Stack seven, Stack eight, Stack nine, Stack ten, Stack eleven, Stack twelve);
-		
+
 		void updateDepositAreasFilled();
 		bool wasMapCompleted(); // the condition for the map to be completed is to deposit the 30 possible rods in their deposit areas (in the boats)
-		// void setWasCompleted(byte status);
 
 		void printField(); // for extreme debugging mode! :)
 
 	private:
 		
-		Stack map[2][6];
+		// Stack map[2][6];
+		Stack map[12];
 		Boat depositAreas[2];
 		byte depositAreasFilled;
-		// byte mapCompleted;
 };
 #endif

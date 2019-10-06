@@ -1,4 +1,6 @@
 #include "Path.h"
+#include <Arduino.h>
+
 
 Path::Path(){
 
@@ -40,6 +42,11 @@ Absis<Coord> Path::getPath(){
 
 void Path::print(){
     for(int i = 0; i < path.size(); ++i){
-        cout << endl <<"x: " << path[i].getX() << "\ty: " << path[i].getY() << endl;
+        Serial.println();
+        Serial.print("x: ");
+        Serial.print(path[i].getX());
+        Serial.print("\ty: ");
+        Serial.print(path[i].getY());
+        Serial.println();
     }
 }

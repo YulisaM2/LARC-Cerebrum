@@ -1,4 +1,5 @@
-#include <iostream>
+#include <Arduino.h>
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -16,18 +17,19 @@
 using namespace std;
 
 void followPath(DriveTrain &driveTrain, const Path &path){
-    cout << "Following path ... " << endl;
+    Serial.println("Following path ... ");
     for(int i = 0; i < path.getLength();++i){
-        cout << "Move to ";
+        Serial.print("Move to ");
         Coord coord = path.getCoordAt(i);
         driveTrain.setX(coord.getX());
         driveTrain.setY(coord.getY());
-        cout << driveTrain.getX() << " " << driveTrain.getY() << endl;
+        Serial.print(driveTrain.getX());
+        Serial.println(driveTrain.getY());
     }
-    cout << "Completed path ! :)" << endl;
+    Serial.println("Completed path ! :)");
 };
 
-int main(){
+void setup(){
     DriveTrain driveTrain(Coord(3,0));
     Cerebrum cerebrum(driveTrain);
 
@@ -87,16 +89,19 @@ int main(){
         followPath(driveTrain, action.path);
         switch(action.command){
             case Command::TakePictures:
-                    cout << "Taking a picture !" << endl;
+                    Serial.println("Taking a picture !");
                     break;
                 case Command::PickUp:
-                    cout << "Picking up sht mofo!" << endl;
+                    Serial.println("Picking up sht mofo!");
                     break;
                 case Command::DropOff:
-                    cout << "Dropping it like it's hot" << endl;
+                    Serial.println("Dropping it like it's hot");
                     break;
         }
-        cin >> op;     
+       delay(1000);     
     }
-    return 0;
 };
+
+void loop(){
+    
+}

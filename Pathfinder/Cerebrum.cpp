@@ -1,4 +1,6 @@
 #include "Cerebrum.h"
+#include <Arduino.h>
+
 
 Cerebrum::Cerebrum(const DriveTrain &driveTrain): greenBoat(Coord(1,0)), blueBoat(Coord(5,0)), driveTrain(driveTrain){
 };
@@ -34,9 +36,9 @@ Action Cerebrum::getCurrentAction(){
                 currentAction.path = aStar.getPath(driveTrain,*targetStack,field);
                 currentRod = targetStack->getTopRod();
                 if(currentRod == Rod::Green){
-                    cout << "Picked up green rod" << endl;
+                    Serial.println("Picked up green rod");
                 }else{
-                    cout << "Picked up blue rod" << endl;
+                    Serial.println("Picked up blue rod");
                 }
                 targetStack->pickUpRod();
                 state = CerebrumState::GoingToBoat;
@@ -101,7 +103,7 @@ Action Cerebrum::getCurrentAction(){
             
 
         case CerebrumState::Finished:{
-            cout << "Finished! Returning to center :)";
+            Serial.println("Finished! Returning to center :)");
             break;
         }
     }
@@ -131,31 +133,31 @@ void Cerebrum::printStacks(){
     if(!stacksSet){
         return;
     }
-    cout << endl;
+    Serial.println();
     for(int i = 3; i >=0 ; --i){
         for(int j = 0; j < 12; ++j){
             if(stacks[j].getHeight() - 1 >= i){
                 switch(stacks[j].getRodAt(i)){
                     case Rod::Red:
-                        cout << "R";
+                        Serial.print("R");
                         break;
                     case Rod::Green:
-                        cout << "G";
+                        Serial.print("G");
                         break;
                     case Rod::Blue:
-                        cout << "B";
+                        Serial.print("B");
                         break;
                     case Rod::None:
-                        cout << "-";
+                        Serial.print("-");
                 }
             }else{
-                cout << " "; 
+                 Serial.print(" "); 
             }
-            cout << '\t';
+            Serial.print('\t');
         }
-        cout << endl;
+        Serial.println();
     }
-    cout << endl;
+    Serial.println();
 };
 
 Stack* Cerebrum::getTargetStack(bool searchBlue, bool searchGreen){

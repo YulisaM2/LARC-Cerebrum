@@ -2,7 +2,7 @@
 #define _BOAT_H
 
 #include "Coord.h"
-#include <iostream>
+
 using namespace std;
 
 struct Zone : public Coord{
@@ -19,9 +19,7 @@ class Boat : public Coord{
         bool isFull();
         void dropOffRod(bool order);
         Zone& getDeliveryZone(bool order); // true for green and false for blue
-        void printZones(){
-            cout << "Boat (" << getX() << " " << getY() << ") Zones: " << leftZone.getRodCount() << " " << topZone.getRodCount() << " " << rightZone.getRodCount() << endl;
-        }
+        void printZones();
     private:
         Zone topZone;
         Zone leftZone;

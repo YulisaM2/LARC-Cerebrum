@@ -3,8 +3,6 @@
 #include "Coord.h"
 #include "Absis.h"
 
-#include <iostream>
-
 using namespace std;
 
 class Path {

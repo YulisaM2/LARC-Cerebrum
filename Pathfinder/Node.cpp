@@ -1,4 +1,5 @@
-#include "Node.h"
+#include "Node.h"'
+#include <Arduino.h>
 
 Node::Node(int x, int y): Coord(x,y){
     f = 0;
@@ -42,11 +43,16 @@ void Node::addNeighbor(Node *neighbor){
     }
 };
 void Node::printNeighbors(){
-    cout << "Neighbors of " << getX() << " " << getY() << endl;
+    Serial.print("Neighbors of ");
+    Serial.print(getX());
+    Serial.println(getY());
     for(int i = 0; i < neighborCounter; ++i){
-        cout << neighbors[i]->getX() << " " << neighbors[i]->getY() << " | ";
+        Serial.print(neighbors[i]->getX());
+        Serial.print(" ");
+        Serial.print(neighbors[i]->getY());
+        Serial.println(" | ");
     }
-    cout << endl;
+    Serial.println();
 };
 
 Node* Node::getPrevious(){

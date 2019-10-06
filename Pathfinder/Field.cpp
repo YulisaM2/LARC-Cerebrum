@@ -1,4 +1,6 @@
 #include "Field.h"
+#include <Arduino.h>
+
 
 Field::Field(){
     for(int i = 0; i < 3; ++i){
@@ -77,10 +79,12 @@ void Field::printField(){
     for(int i = 0; i < matrix.size(); ++i){
         for(int j = 0; j < matrix[i].size(); ++j){
             if(matrix[i][j] != nullptr){
-                cout << matrix[i][j]->getX() << " " << matrix[i][j]->getY() << " ";
+                Serial.print(matrix[i][j]->getX());
+                Serial.print(" ");
+                Serial.print(matrix[i][j]->getY());
             } 
         }
-        cout << endl;
+        Serial.println();
     }
 
     for(int i = 0; i < matrix.size(); ++i){
@@ -89,7 +93,7 @@ void Field::printField(){
                 matrix[i][j]->printNeighbors();
             } 
         }
-        cout << endl;
+        Serial.println();
     }
 };
 

@@ -1,4 +1,5 @@
 #include "AStar.h"
+#include <Arduino.h>
 
 int AStar::heuristic(Coord start, Coord end){
     return abs(start.getX() - end.getX()) + abs(start.getY() - end.getY());
@@ -82,6 +83,6 @@ Path AStar::getPath(Coord startCoord, Coord endCoord, Field& field){
             }
         }
     }
-    cout << "No solution" << endl;
+    Serial.println("No solution");
     return pathFinal;
 }

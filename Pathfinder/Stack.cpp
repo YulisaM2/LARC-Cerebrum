@@ -1,4 +1,5 @@
 #include "Stack.h"
+#include <Arduino.h>
 
 Stack::Stack(){
 
@@ -32,19 +33,19 @@ void Stack::printStack(){
     for(int i = 0; i < rods.size();++i){
         switch(rods[i]){
             case Rod::Green:
-                cout << "Green";
+                Serial.print("Green");
                 break;
             case Rod::Blue:
-                cout << "Blue";
+                Serial.print("Blue");
                 break;
             case Rod::Red:
-                cout << "Red";
+                Serial.print("Red");
                 break;
             case Rod::None:
-                cout << "None";
+                Serial.print("None");
                 break;
         }
-        cout << endl; 
+        Serial.println(); 
     }
 };
 

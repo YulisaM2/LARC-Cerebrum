@@ -4,7 +4,6 @@
 #include "Node.h"
 #include "Absis.h"
 
-#include <iostream>
 using namespace std;
 class Field{
     public:

@@ -1,5 +1,5 @@
 #include "Boat.h"
-#include <iostream>
+#include <Arduino.h>
 
 using namespace std;
 
@@ -45,5 +45,22 @@ Zone& Boat::getDeliveryZone(bool order){
 void Boat::dropOffRod(bool order){
     Zone &zone = getDeliveryZone(order);
     zone.dropOffRod();
-    cout << zone.getX() << " " << zone.getY() << " " << zone.getRodCount() << endl;
+    Serial.print(zone.getX());
+    Serial.print(" ");
+    Serial.print(zone.getY());
+    Serial.print(zone.getRodCount());
+    Serial.println();
 };
+
+void Boat::printZones(){
+    Serial.print("Boat (");
+    Serial.print(getX());
+    Serial.print(getY());
+    Serial.print(") Zones: ");
+    Serial.print(leftZone.getRodCount());
+    Serial.print(" ");
+    Serial.print(topZone.getRodCount());
+    Serial.print(" ");
+    Serial.print(rightZone.getRodCount());
+    Serial.println();
+}

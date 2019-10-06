@@ -1,8 +1,6 @@
 #ifndef _ABSIS_H_
 #define _ABSIS_H_
 
-#include <iostream> 
-
 using namespace std;
 
 template<class T>

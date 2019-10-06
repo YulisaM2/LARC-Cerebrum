@@ -2,7 +2,6 @@
 #define _NODE_H
 
 #include "Coord.h"
-#include <iostream>
 #include "Absis.h"
 
 using namespace std;

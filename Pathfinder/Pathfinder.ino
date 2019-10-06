@@ -83,7 +83,6 @@ void setup(){
     stacks[10].setCoord(Coord(6,2));
     stacks[11].setCoord(Coord(6,3));
 
-    char op;
     while(!cerebrum.isFinished()){
         if(cerebrum.isRequestingStacks()){
             cerebrum.setStacks(stacks);

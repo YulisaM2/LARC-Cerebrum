@@ -45,11 +45,6 @@ Zone& Boat::getDeliveryZone(bool order){
 void Boat::dropOffRod(bool order){
     Zone &zone = getDeliveryZone(order);
     zone.dropOffRod();
-    Serial.print(zone.getX());
-    Serial.print(" ");
-    Serial.print(zone.getY());
-    Serial.print(zone.getRodCount());
-    Serial.println();
 };
 
 void Boat::printZones(){

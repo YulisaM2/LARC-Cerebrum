@@ -14,8 +14,8 @@ class Rod{
 
 		byte getColor();
 
-		void setNextRod(Rod &rod);
-		Rod* getNextRod();
+		// void setNextRod(Rod &rod);
+		// Rod* getNextRod();
 		
 		void printRod(); // for debugging mode
 		
@@ -26,10 +26,10 @@ class Rod{
 		bool wasPickedUp();
 		void pickedUpRod();
 
-		void isTopOf(); // for debugging mode
+		// void isTopOf(); // for debugging mode
 
 	private:
-		byte status; // red green blue blocked pickedUp (1 indicates that that state is true)
-		Rod* nextRod; // to keep track of the following rod on the stack, it will help to know from which rod to pick up next time (instead of iterating throught the whole stack)
+		volatile byte status; // red green blue blocked pickedUp (1 indicates that that state is true)
+		// Rod* nextRod; // to keep track of the following rod on the stack, it will help to know from which rod to pick up next time (instead of iterating throught the whole stack)
 };
 #endif

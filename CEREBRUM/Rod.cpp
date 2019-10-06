@@ -2,12 +2,12 @@
 
 Rod::Rod(){
 	status = 0;
-	nextRod = nullptr;
+	// nextRod = nullptr;
 };
 
 Rod::Rod(byte bStatus){
 	status = bStatus;
-	nextRod = nullptr;
+	// nextRod = nullptr;
 };
 
 void Rod::setStatus(byte bStatus){
@@ -19,22 +19,24 @@ byte Rod::getStatus(){
 };
 
 byte Rod::getColor(){
-	if(status & (green) != 0){
+	byte checkG = status & green;
+	byte checkB = status & blue;
+	if(checkG != 0){
 		return (green);
-	}else if(status & (blue) != 0){
+	}else if(checkB != 0){
 		return (blue);
 	}else{
-		Serial.println("Color not recognized in class Rod!");
+		// Serial.println("Either RED or Color not recognized in class Rod!");
 	}
 }
 
-void Rod::setNextRod(Rod &rod){
-	nextRod = &rod;
-};
+// void Rod::setNextRod(Rod &rod){
+// 	nextRod = &rod;
+// };
 
-Rod* Rod::getNextRod(){
-	return nextRod;
-};
+// Rod* Rod::getNextRod(){
+// 	return nextRod;
+// };
 
 
 // R G B Blocked 0 0 0 0
@@ -115,14 +117,13 @@ void Rod::pickedUpRod(){
 	}
 };
 
-void Rod::isTopOf(){
-	if(nextRod != nullptr){
-		Serial.print("is on top of ");
-		nextRod->printRod();
-	}else{
-		Serial.println("No more connections, might be last rod or misconstructed");
-	}
-	Serial.println();
-	delay(100);
-}
-
+// void Rod::isTopOf(){
+// 	if(nextRod != nullptr){
+// 		Serial.print("is on top of ");
+// 		nextRod->printRod();
+// 	}else{
+// 		Serial.println("No more connections, might be last rod or misconstructed");
+// 	}
+// 	Serial.println();
+// 	delay(100);
+// };

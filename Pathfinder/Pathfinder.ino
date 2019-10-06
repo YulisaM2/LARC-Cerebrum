@@ -97,10 +97,12 @@ void setup(){
                     Serial.println("Taking a picture !");
                     break;
                 case Command::PickUp:
-                    Serial.println("Picking up sht mofo!");
+                    Serial.print("Picking up sht mofo! At height: ");
+                    Serial.println(action.height);
                     break;
                 case Command::DropOff:
-                    Serial.println("Dropping it like it's hot");
+                    Serial.print("Dropping it like it's hot At height: ");
+                    Serial.println(action.height);
                     break;
         }
     }

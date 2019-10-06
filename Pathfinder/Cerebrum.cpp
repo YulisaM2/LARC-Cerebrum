@@ -40,6 +40,7 @@ Action Cerebrum::getCurrentAction(){
                 }else{
                     Serial.println("Picked up blue rod");
                 }
+                currentAction.height = targetStack->getHeight();
                 targetStack->pickUpRod();
                 state = CerebrumState::GoingToBoat;
             }else{
@@ -55,11 +56,15 @@ Action Cerebrum::getCurrentAction(){
         case CerebrumState::GoingToBoat:{
             currentAction.command = Command::DropOff;
             if(currentRod == Rod::Green){
-                currentAction.path = aStar.getPath(driveTrain,greenBoat.getDeliveryZone(true),field);
+                Zone deliveryZone = greenBoat.getDeliveryZone(true);
+                currentAction.path = aStar.getPath(driveTrain, deliveryZone, field);
+                currentAction.height = deliveryZone.getRodCount() + 1;
                 greenBoat.dropOffRod(true);
                 greenBoat.printZones();
             }else{
-                currentAction.path = aStar.getPath(driveTrain,blueBoat.getDeliveryZone(false),field);
+                Zone deliveryZone = blueBoat.getDeliveryZone(false);
+                currentAction.path = aStar.getPath(driveTrain,deliveryZone,field);
+                currentAction.height = deliveryZone.getRodCount() + 1;
                 blueBoat.dropOffRod(false);
                 blueBoat.printZones();
             }

@@ -18,6 +18,7 @@ enum class Command{
 struct Action{
     Path path;
     Command command;
+    int height = 0;
 };
 
 enum class CerebrumState {

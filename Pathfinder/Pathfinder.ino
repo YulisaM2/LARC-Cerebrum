@@ -1,8 +1,7 @@
 #include <Arduino.h>
-
+#include "MemoryFree.h"
 #include <stdlib.h>
 #include <time.h>
-
 #include "Node.h"
 #include "Field.h" 
 #include "Absis.h"
@@ -24,12 +23,17 @@ void followPath(DriveTrain &driveTrain, const Path &path){
         driveTrain.setX(coord.getX());
         driveTrain.setY(coord.getY());
         Serial.print(driveTrain.getX());
+        Serial.print(",");
         Serial.println(driveTrain.getY());
     }
     Serial.println("Completed path ! :)");
 };
 
 void setup(){
+    Serial.begin(9600);
+    Serial.print("freeMemory()=");
+    Serial.println(freeMemory());
+    
     DriveTrain driveTrain(Coord(3,0));
     Cerebrum cerebrum(driveTrain);
 
@@ -87,6 +91,8 @@ void setup(){
         cerebrum.printStacks();
         Action action = cerebrum.getCurrentAction();
         followPath(driveTrain, action.path);
+        Serial.print("freeMemory()=");
+        Serial.println(freeMemory());
         switch(action.command){
             case Command::TakePictures:
                     Serial.println("Taking a picture !");
@@ -98,7 +104,6 @@ void setup(){
                     Serial.println("Dropping it like it's hot");
                     break;
         }
-       delay(1000);     
     }
 };
 

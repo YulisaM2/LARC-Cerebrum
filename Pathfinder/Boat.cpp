@@ -55,6 +55,7 @@ void Boat::dropOffRod(bool order){
 void Boat::printZones(){
     Serial.print("Boat (");
     Serial.print(getX());
+    Serial.print(",");
     Serial.print(getY());
     Serial.print(") Zones: ");
     Serial.print(leftZone.getRodCount());

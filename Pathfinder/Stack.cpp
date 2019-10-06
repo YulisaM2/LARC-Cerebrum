@@ -10,7 +10,7 @@ Stack::Stack(Absis<Rod> rods, Coord coord):Coord(coord){
 };
 
 void Stack::pickUpRod(){
-    rods.remove(rods[rods.size() - 1]);
+    rods.erase(rods.size() - 1);
 };
 
 int Stack::getHeight(){

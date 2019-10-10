@@ -6,17 +6,13 @@ import math
 class Processor:
 
     def __init__(self):
-        self.height = 720
-        self.width = 1280
-        self.farRight = [35, 150, 124, 178]
-        self.closeRight = [1, 200, 200, 324]
-        self.farLeft = [55, 100, 55, 100]
-        self.closeLeft = [55, 100, 55, 100]
         self.thresholdRed = [np.array([0, 120, 70]), np.array([10, 255, 255]), np.array([170, 120, 70]),
                              np.array([180, 255, 255])]
         self.thresholdGreen = [np.array([60, 30, 0]), np.array([90, 255, 255])]
         self.thresholdBlue = [np.array([90, 0, 0]), np.array([120, 190, 120])]
-        self.percentage = 20
+        self.percentageColorArea = 20
+        self.percentageArea = 5
+        self.percentageWidth = 10
 
     def getDistance(self, coordA, coordB):
         return math.sqrt((coordA[0] - coordB[0]) ** 2 + (coordA[1] - coordB[1]) ** 2)
@@ -33,67 +29,64 @@ class Processor:
         return closest
 
     def unwarpRods(self, img, coordList):
-        # height, width = img.shape[:2]
-        width = 400
-        height = 300
+        width = 100
+        height = 100
         destinationPoints = coordList.copy()
 
         # topleft, topRight, bottomLeft, bottomRight
-        destinationPoints[0] = (0,0)
+        destinationPoints[0] = (0, 0)
         destinationPoints[1] = (width, 0)
         destinationPoints[2] = (0, height)
-        destinationPoints[3] = (width,height)
-        # print("Coordlist")
-        # print(coordList)
-        # print("Destinantion Points")
-        # print(destinationPoints)
+        destinationPoints[3] = (width, height)
 
         m = cv2.getPerspectiveTransform(coordList, destinationPoints)
-        warped = cv2.warpPerspective(img, m, (width,height), flags=cv2.INTER_LINEAR)
+        warped = cv2.warpPerspective(img, m, (width, height), flags=cv2.INTER_LINEAR)
 
-        cv2.imshow("WARPEDDD", warped)
+        return warped
 
     def colorConcentration(self, img):
         area = img.shape[0] * img.shape[1]
+        if area <= 0:
+            return False
+
         contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         currArea = 0
         for contour in contours:
             currArea += cv2.contourArea(contour)
 
         areaPercent = currArea / area * 100
-        return areaPercent >= self.percentage
+        return areaPercent >= self.percentageColorArea
 
     def getColorPosition(self, img):
         height = img.shape[0]
         width = img.shape[1]
         segmentHeight = math.floor(height / 4)
 
+        segmentWidth = math.floor(width / 4)
+        segmentLeft = img[0:height, 0:segmentWidth]
+        segmentRight = img[0:height, width - segmentWidth: width]
+
         currPos = 0
-        rods = [0, 0, 0, 0]
-        for i in range(0, len(rods)):
-            currSegment = img[currPos:currPos + segmentHeight, 0:width]
+        stacks = [[0, 0, 0, 0], [0, 0, 0, 0]]
+
+        for j in range(0, len(stacks[0])):
+            currSegment = segmentLeft[currPos:currPos + segmentHeight, 0:segmentWidth]
             currPos += segmentHeight
-            rods[i] = 1 if self.colorConcentration(currSegment) else 0
+            stacks[0][j] = 1 if self.colorConcentration(currSegment) else 0
 
-        return rods
+        currPos = 0
+        for j in range(0, len(stacks[1])):
+            currSegment = segmentRight[currPos:currPos + segmentHeight, 0:segmentWidth]
+            currPos += segmentHeight
+            stacks[1][j] = 1 if self.colorConcentration(currSegment) else 0
 
-    def processLeft(self, img):
+        return stacks
+
+    def process(self, img):
         newImg = img.copy()
-
-        farSection = newImg[self.farLeft[0]:self.farLeft[1], self.farLeft[2]:self.farLeft[3]]
-        closeSection = newImg[self.closeLeft[0]:self.closeLeft[1], self.closeLeft[2]:self.closeLeft[3]]
-
-    def processRight(self, img):
-        newImg = img.copy()
-        # newImg = cv2.blur(newImg, (5, 5))
-        # cv2.imshow('test', newImg)
+        newImg = cv2.blur(newImg, (5, 5))
 
         newImg = cv2.cvtColor(newImg, cv2.COLOR_BGR2HSV)
-        farSection = newImg[self.farRight[0]:self.farRight[1], self.farRight[2]:self.farRight[3]]
-        closeSection = newImg[self.closeRight[0]:self.closeRight[1], self.closeRight[2]: self.closeRight[3]]
-
-        # cv2.imshow('far', farSection)
-        # cv2.imshow('close', closeSection)
 
         # Range for lower red
         maskLowerRed = cv2.inRange(newImg, self.thresholdRed[0], self.thresholdRed[1])
@@ -104,15 +97,15 @@ class Processor:
         # Generating the final mask to detect red color
         maskRed = maskLowerRed + maskUpperRed
 
-        cv2.imshow('Rojo', maskRed)
+        # cv2.imshow('Rojo', maskRed)
 
         # Adding green mask
         maskGreen = cv2.inRange(newImg, self.thresholdGreen[0], self.thresholdGreen[1])
-        cv2.imshow('Verde', maskGreen)
+        # cv2.imshow('Verde', maskGreen)
 
         # Adding blue mask
         maskBlue = cv2.inRange(newImg, self.thresholdBlue[0], self.thresholdBlue[1])
-        cv2.imshow("Azul", maskBlue)
+        # cv2.imshow("Azul", maskBlue)
 
         maskFinal = maskBlue + maskGreen + maskRed
 
@@ -130,13 +123,14 @@ class Processor:
             maxX = max(box, key=lambda x: x[0])[0]
             width = maxX - minX
 
-            if area > 800 and width > 50:
-                # cv2.drawContours(newImg, [box], 0, (0, 255, 0), 2)
-                rodPoints.extend(box.tolist())
+            # Filter unnecessary areas such as stacks that are behind and the floor's lines
+            if area / (newImg.shape[0] * newImg.shape[1]) * 100 > self.percentageArea and width / img.shape[
+                1] * 100 > self.percentageWidth:
+                cv2.drawContours(newImg, [contour], 0, (0, 255, 0), 2)
+                rodPoints.extend(np.vstack(contour).squeeze().tolist())
 
-        cv2.imshow("Mask Final", maskFinal)
+        # cv2.imshow("Mask Final", maskFinal)
         cv2.imshow("New Image", newImg)
-
         topLeft = self.getClosestTo(rodPoints, (0, 0))
         bottomLeft = self.getClosestTo(rodPoints, (0, newImg.shape[0]))
         topRight = self.getClosestTo(rodPoints, (newImg.shape[1], 0))
@@ -144,31 +138,22 @@ class Processor:
 
         wrappedPoints = np.float32([topLeft, topRight, bottomLeft, bottomRight])
 
-        self.unwarpRods(newImg, wrappedPoints)
-
+        unwarped = self.unwarpRods(img, wrappedPoints)
+        cv2.imshow("Unwrap", unwarped)
+        unwarpedGreenMask = self.unwarpRods(maskGreen, wrappedPoints)
+        unwarpedBlueMask = self.unwarpRods(maskBlue, wrappedPoints)
+        unwarpedRedMask = self.unwarpRods(maskRed, wrappedPoints)
 
         stacks = ["", "", "", ""]
 
-        blueRods = self.getColorPosition(maskBlue)
+        blueRods = self.getColorPosition(unwarpedBlueMask)
         print(blueRods)
 
-        for i in range(0, 4):
-            if blueRods[i] == 1:
-                stacks[i] = "blue"
-
-        greenRods = self.getColorPosition(maskGreen)
+        greenRods = self.getColorPosition(unwarpedGreenMask)
         print(greenRods)
 
-        for i in range(0, 4):
-            if greenRods[i] == 1:
-                stacks[i] = "green"
-
-        redRods = self.getColorPosition(maskRed)
+        redRods = self.getColorPosition(unwarpedRedMask)
         print(redRods)
-
-        for i in range(0, 4):
-            if redRods[i] == 1:
-                stacks[i] = "red"
 
         for stack in stacks:
             print(stack)

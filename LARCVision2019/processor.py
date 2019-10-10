@@ -84,6 +84,7 @@ class Processor:
     def process(self, img):
         newImg = img.copy()
         newImg = cv2.blur(newImg, (5, 5))
+        stacks = [["", "", "", ""], ["", "", "", ""]]
 
         newImg = cv2.cvtColor(newImg, cv2.COLOR_BGR2HSV)
 
@@ -128,29 +129,26 @@ class Processor:
                 cv2.drawContours(newImg, [contour], 0, (0, 255, 0), 2)
                 rodPoints.extend(np.vstack(contour).squeeze().tolist())
 
-        # cv2.imshow("Mask Final", maskFinal)
-        cv2.imshow("New Image", newImg)
-        topLeft = self.getClosestTo(rodPoints, (0, 0))
-        bottomLeft = self.getClosestTo(rodPoints, (0, newImg.shape[0]))
-        topRight = self.getClosestTo(rodPoints, (newImg.shape[1], 0))
-        bottomRight = self.getClosestTo(rodPoints, (newImg.shape[1], newImg.shape[0]))
+        if len(rodPoints) > 0:
+            topLeft = self.getClosestTo(rodPoints, (0, 0))
+            bottomLeft = self.getClosestTo(rodPoints, (0, newImg.shape[0]))
+            topRight = self.getClosestTo(rodPoints, (newImg.shape[1], 0))
+            bottomRight = self.getClosestTo(rodPoints, (newImg.shape[1], newImg.shape[0]))
 
-        wrappedPoints = np.float32([topLeft, topRight, bottomLeft, bottomRight])
+            wrappedPoints = np.float32([topLeft, topRight, bottomLeft, bottomRight])
 
-        unwarped = self.unwarpRods(img, wrappedPoints)
-        cv2.imshow("Unwrap", unwarped)
-        unwarpedGreenMask = self.unwarpRods(maskGreen, wrappedPoints)
-        unwarpedBlueMask = self.unwarpRods(maskBlue, wrappedPoints)
-        unwarpedRedMask = self.unwarpRods(maskRed, wrappedPoints)
+            unwarped = self.unwarpRods(img, wrappedPoints)
 
-        stacks = [["", "", "", ""], ["", "", "", ""]]
+            unwarpedGreenMask = self.unwarpRods(maskGreen, wrappedPoints)
+            unwarpedBlueMask = self.unwarpRods(maskBlue, wrappedPoints)
+            unwarpedRedMask = self.unwarpRods(maskRed, wrappedPoints)
 
-        blueRods = self.getColorPosition(unwarpedBlueMask, "b", stacks)
+            blueRods = self.getColorPosition(unwarpedBlueMask, "b", stacks)
 
-        greenRods = self.getColorPosition(unwarpedGreenMask, "g", stacks)
+            greenRods = self.getColorPosition(unwarpedGreenMask, "g", stacks)
 
-        redRods = self.getColorPosition(unwarpedRedMask, "r", stacks)
+            redRods = self.getColorPosition(unwarpedRedMask, "r", stacks)
 
-        # print(stacks)
+            # print(stacks)
 
-        return stacks
+        return stacks, maskFinal

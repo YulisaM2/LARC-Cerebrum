@@ -1,31 +1,41 @@
+# Import the camera server
+from cscore import CameraServer
+
+# Import OpenCV and NumPy
 import cv2
 import numpy as np
 import processor
 
-processing = processor.Processor()
+cs = CameraServer.getInstance()
+cs.enableLogging()
 
+# Capture from the first USB Camera on the system
+camera = cs.startAutomaticCapture()
+camera.setResolution(320, 240)
 
-# cv2.imshow('Test', cap)
-# cv2.waitKey(0)
-cap = cv2.VideoCapture(1)
+# Get a CvSink. This will capture images from the camera
+cvSink = cs.getVideo()
+
+# (optional) Setup a CvSource. This will send images back to the Dashboard
+outputStream = cs.putVideo("Name", 320, 240)
+
+# Allocating new images is very expensive, always try to preallocate
+img = np.zeros(shape=(240, 320, 3), dtype=np.uint8)
+processin = processor.Processor()
 while True:
-    ret, img = cap.read()
-    if ret:
-        cv2.imshow(img)
-    cv2.waitKey(1)
+    # Tell the CvSink to grab a frame from the camera and put it
+    # in the source image.  If there is an error notify the output.
+    time, img = cvSink.grabFrame(img)
+    if time == 0:
+        # Send the output the error.
+        outputStream.notifyError(cvSink.getError());
+        # skip the rest of the current iteration
+        continue
+    _, maskFinal = processin.process(img)
 
-# cap = cv2.imread('SS LARC/WIN_20190920_12_08_51_Pro.jpg')
-# cap2 = cv2.imread('SS LARC/WIN_20190920_12_07_48_Pro.jpg')
-# cap3 = cv2.imread('SS LARC/WIN_20190920_12_07_41_Pro.jpg')
+    #
+    # Insert your image processing logic here!
+    #
 
-# cap = cv2.imread('SS LARC/left1.jpg')
-# cap2 = cv2.imread('SS LARC/left2.jpg')
-# cap3 = cv2.imread('SS LARC/left3.jpg')
-
-processing.process(cap)
-cv2.waitKey(0)
-processing.process(cap2)
-cv2.waitKey(0)
-processing.process(cap3)
-cv2.waitKey(0)
-
+    # (optional) send some image back to the dashboard
+    outputStream.putFrame(maskFinal)

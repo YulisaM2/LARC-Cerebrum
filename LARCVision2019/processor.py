@@ -57,7 +57,7 @@ class Processor:
         areaPercent = currArea / area * 100
         return areaPercent >= self.percentageColorArea
 
-    def getColorPosition(self, img):
+    def getColorPosition(self, img, token, stacks):
         height = img.shape[0]
         width = img.shape[1]
         segmentHeight = math.floor(height / 4)
@@ -67,18 +67,17 @@ class Processor:
         segmentRight = img[0:height, width - segmentWidth: width]
 
         currPos = 0
-        stacks = [[0, 0, 0, 0], [0, 0, 0, 0]]
 
         for j in range(0, len(stacks[0])):
             currSegment = segmentLeft[currPos:currPos + segmentHeight, 0:segmentWidth]
             currPos += segmentHeight
-            stacks[0][j] = 1 if self.colorConcentration(currSegment) else 0
+            stacks[0][j] = token if self.colorConcentration(currSegment) else stacks[0][j]
 
         currPos = 0
         for j in range(0, len(stacks[1])):
             currSegment = segmentRight[currPos:currPos + segmentHeight, 0:segmentWidth]
             currPos += segmentHeight
-            stacks[1][j] = 1 if self.colorConcentration(currSegment) else 0
+            stacks[1][j] = token if self.colorConcentration(currSegment) else stacks[1][j]
 
         return stacks
 
@@ -144,16 +143,14 @@ class Processor:
         unwarpedBlueMask = self.unwarpRods(maskBlue, wrappedPoints)
         unwarpedRedMask = self.unwarpRods(maskRed, wrappedPoints)
 
-        stacks = ["", "", "", ""]
+        stacks = [["", "", "", ""], ["", "", "", ""]]
 
-        blueRods = self.getColorPosition(unwarpedBlueMask)
-        print(blueRods)
+        blueRods = self.getColorPosition(unwarpedBlueMask, "b", stacks)
 
-        greenRods = self.getColorPosition(unwarpedGreenMask)
-        print(greenRods)
+        greenRods = self.getColorPosition(unwarpedGreenMask, "g", stacks)
 
-        redRods = self.getColorPosition(unwarpedRedMask)
-        print(redRods)
+        redRods = self.getColorPosition(unwarpedRedMask, "r", stacks)
 
-        for stack in stacks:
-            print(stack)
+        # print(stacks)
+
+        return stacks

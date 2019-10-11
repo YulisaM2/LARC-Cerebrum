@@ -1,6 +1,13 @@
 import cv2
 import numpy as np
 import math
+from networktables import NetworkTablesInstance
+from networktables import NetworkTables
+
+ninst = NetworkTablesInstance.getDefault()
+ninst.startClient("localhost")
+
+threshTable = ninst.getTable("ThreshTable")
 
 
 class Processor:
@@ -8,11 +15,20 @@ class Processor:
     def __init__(self):
         self.thresholdRed = [np.array([0, 120, 70]), np.array([10, 255, 255]), np.array([170, 120, 70]),
                              np.array([180, 255, 255])]
-        self.thresholdGreen = [np.array([60, 30, 0]), np.array([90, 255, 255])]
-        self.thresholdBlue = [np.array([90, 0, 0]), np.array([120, 190, 120])]
+        self.thresholdGreen = [np.array([30, 100, 30]), np.array([90, 255, 255])]
+        self.thresholdBlue = [np.array([90, 0, 40]), np.array([140, 255, 255])]
+
+        threshTable.putNumber("low_h", self.thresholdBlue[0][0])
+        threshTable.putNumber("low_s", self.thresholdBlue[0][1])
+        threshTable.putNumber("low_v", self.thresholdBlue[0][2])
+
+        threshTable.putNumber("up_h", self.thresholdBlue[1][0])
+        threshTable.putNumber("up_s", self.thresholdBlue[1][1])
+        threshTable.putNumber("up_v", self.thresholdBlue[1][2])
+
         self.percentageColorArea = 20
-        self.percentageArea = 5
-        self.percentageWidth = 10
+        self.percentageArea = 3
+        self.percentageWidth = 5
 
     def getDistance(self, coordA, coordB):
         return math.sqrt((coordA[0] - coordB[0]) ** 2 + (coordA[1] - coordB[1]) ** 2)
@@ -88,6 +104,14 @@ class Processor:
 
         newImg = cv2.cvtColor(newImg, cv2.COLOR_BGR2HSV)
 
+        self.thresholdBlue[0][0] = threshTable.getNumber("low_h", self.thresholdBlue[0][0])
+        self.thresholdBlue[0][1] = threshTable.getNumber("low_s", self.thresholdBlue[0][1])
+        self.thresholdBlue[0][2] = threshTable.getNumber("low_v", self.thresholdBlue[0][2])
+
+        self.thresholdBlue[1][0] = threshTable.getNumber("up_h", self.thresholdBlue[1][0])
+        self.thresholdBlue[1][1] = threshTable.getNumber("up_s", self.thresholdBlue[1][1])
+        self.thresholdBlue[1][2] = threshTable.getNumber("up_v", self.thresholdBlue[1][2])
+
         # Range for lower red
         maskLowerRed = cv2.inRange(newImg, self.thresholdRed[0], self.thresholdRed[1])
 
@@ -129,6 +153,8 @@ class Processor:
                 cv2.drawContours(newImg, [contour], 0, (0, 255, 0), 2)
                 rodPoints.extend(np.vstack(contour).squeeze().tolist())
 
+        unwarped = np.zeros(shape=[img.shape[0], img.shape[1], 3], dtype=np.uint8)
+
         if len(rodPoints) > 0:
             topLeft = self.getClosestTo(rodPoints, (0, 0))
             bottomLeft = self.getClosestTo(rodPoints, (0, newImg.shape[0]))
@@ -149,6 +175,4 @@ class Processor:
 
             redRods = self.getColorPosition(unwarpedRedMask, "r", stacks)
 
-            # print(stacks)
-
-        return stacks, maskFinal
+        return stacks, unwarped

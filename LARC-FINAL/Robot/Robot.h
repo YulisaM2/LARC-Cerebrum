@@ -5,12 +5,10 @@
 #include <Motor.h>
 class Robot {
 public:
-	Robot(Motor m1, Motor m2, Motor  m3, Motor  m4) :motorIF(m1),motorDF(m2),motorDA(m3),motorIA(m4) {}
+	Robot(Motor &m1, Motor &m2, Motor &m3, Motor &m4):motorIF(m1),motorDF(m2),motorDA(m3),motorIA(m4) {}
 	void avanzar(int);
-	void moverIzq(int);
-	void moverDer(int);
-	void girarDer(int);
 	void girarIzq(int);
+	void girarDer(int);
 	void retroceder(int);
 	void detener();
 	void cambiarVelocidad(int);
@@ -27,3 +25,4 @@ private:
 	Motor motorDA;
 };
 #endif
+

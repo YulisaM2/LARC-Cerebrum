@@ -9,7 +9,7 @@
 
 
 void Robot::avanzar(int pwm){
-	
+	Serial.println("Avanzar");
 	motorIF.avanzar(pwm);
 	motorIA.avanzar(pwm);
 	motorDF.avanzar(pwm);
@@ -33,20 +33,6 @@ void Robot::moverDer(int pwm){
 	motorIA.retroceder(pwm);
 	motorDF.retroceder(pwm);
 	motorDA.avanzar(pwm);
-}
-
-void Robot::girarIzq(int pwm){
-	motorDF.avanzar(pwm);
-	motorDA.avanzar(pwm);
-	motorIF.retroceder(pwm);
-	motorIA.retroceder(pwm);
-}
-
-void Robot::girarDer(int pwm){
-	motorIF.avanzar(pwm);
-	motorIA.avanzar(pwm-3);
-	motorDF.retroceder(pwm);
-	motorDA.retroceder(pwm-3);
 }
 
 void Robot::retroceder(int pwm){

@@ -1,3 +1,7 @@
+void inicializarImanes(){
+  pinMode(35,OUTPUT);
+  pinMode(36,OUTPUT);
+}
 void inicializarMotores(){
   for(int i= 0;i<8;i++){
     pinMode(motores[i],OUTPUT);
@@ -146,16 +150,15 @@ void inicializarPID(){
     miPID[i] = PID(&input[i],&setPoint[i],&output[i],Kp[i],Ki[i],Kd[i],i);
   }
      miPID[0].Limites(70,230);     // GIROS
-     miPID[1].Limites(0, 13);    //LINEA   
+     miPID[1].Limites(0, 15);    //LINEA   
 }
 
 
 void inicializarMUX(){
-  for(int i =0;i<4;i++){
-    for(int j = 0;j<3;j++){
-      pinMode(mux[i][j],OUTPUT);
-    }
-  }
+  MUXLinea.inicializarMUX();
+  MUXLineaCentro.inicializarMUX();
+  MUXLineaAzul.inicializarMUX();
+  MUXContenedor.inicializarMUX();
 }
 
 void inicializarBNO(){
@@ -170,11 +173,19 @@ void inicializarBNO(){
     Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
-  
-  delay(1000);
-    
-  bno.setExtCrystalUse(true);
- sensors_event_t event;
+  /*
+ while(orientationStatus() != 3)
+  {
+    Serial.println("NCal");
+  }
+    Serial.print("SCal");
+*/
+
+ 
+  sensors_event_t event;
   bno.getEvent(&event);
- BNOSetPoint = event.orientation.x;
+  BNOSetPoint = event.orientation.x;
+  delay(1000);
+  
+
 }

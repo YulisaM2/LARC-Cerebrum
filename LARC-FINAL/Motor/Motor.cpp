@@ -26,8 +26,8 @@ void Motor::retroceder(int i){
 }
 void Motor::detener(){
 	velocidad = 0;
-	analogWrite(pin1,velocidad);
-	analogWrite(pin2,velocidad);
+	analogWrite(pin1,0);
+	analogWrite(pin2,0);
 }
 void Motor::limpiarEncoder(){
 	contador = 0;

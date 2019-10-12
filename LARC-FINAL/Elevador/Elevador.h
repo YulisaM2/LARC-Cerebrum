@@ -1,4 +1,3 @@
-
 #ifndef Elevador_h
 #define Elevador_h
 #define LIBRARY_VERSION 0.1.0
@@ -12,11 +11,14 @@ public:
 	void setTiempo(int);
 	int getPosicion();
 	int getTiempo();
+	void activarIman();
+	void apagarIman();
 private:
 	int posicionVdd;
 	Servo myservo;
 	int tiempo;
 	int posicion;
+	bool bandera = true;
 
 };
 #endif

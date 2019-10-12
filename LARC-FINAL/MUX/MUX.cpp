@@ -13,7 +13,7 @@ void MUX::inicializarMUX(){
 	
 }
 
-MUX::valor(int i){
+void MUX::valor(int i){
 	
     r0 = bitRead(i,0);    // use this with arduino 0013 (and newer versions)     
 
@@ -26,10 +26,19 @@ MUX::valor(int i){
     digitalWrite(pin2, r1);
 
     digitalWrite(pin3, r2);
-    //Serial.print(" i:    ");
-    //Serial.println(count);
-
-    val[i] = analogRead(analogico);
+    Serial.print(" i:    ");
+    Serial.println(i);
+ Serial.println(analogRead(analogico));
+   val[i] = analogRead(analogico);
     
 }
 
+void MUX::imprimir(){
+    for(int i = 0;i<8;i++){
+        Serial.print("  i:  ");
+        Serial.print(i);
+        Serial.print("  Valor:  ");
+        Serial.println(val[i]);
+    }
+
+}

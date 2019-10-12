@@ -5,7 +5,7 @@
 
 class Motor {
 public:
-
+	
 	Motor(int pin1, int pin2);
 	void avanzar(int j);
 	void retroceder(int i);

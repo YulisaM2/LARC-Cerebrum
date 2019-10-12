@@ -13,6 +13,8 @@ public:
     void setTargetHeading(double heading);
     void driveXAxisDistance(double distance);
     void driveYAxisDistance(double distance);
+    void moveXBlack(bool untilBlackIsFound);
+	void moveYBlack(bool untilBlackIsFound);
 private:
     void writeMotors(MecanumMotorValues values);
     void update();  

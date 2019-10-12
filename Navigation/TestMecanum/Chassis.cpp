@@ -57,6 +57,7 @@ void Chassis::driveXAxisDistance(double distance){
 
         setVelocities(0.3 * multiplier, 0);
     }
+    setVelocities(0, 0);
 }
 
 void Chassis::driveYAxisDistance(double distance){
@@ -73,6 +74,7 @@ void Chassis::driveYAxisDistance(double distance){
 
         setVelocities(0, 0.3 * multiplier);
     }
+    setVelocities(0, 0);
 }
 
 void Chassis::writeMotors(MecanumMotorValues values){
@@ -81,6 +83,14 @@ void Chassis::writeMotors(MecanumMotorValues values){
   bottomLeft->set(values.motorBottomLeftSpeed);
   bottomRight->set(values.motorBottomRightSpeed);
 };
+
+void Chassis::moveXUntilBlack(bool untilBlackIsFound){
+
+}
+
+void Chassis::moveYUntilBlack(bool untilBlackIsFound){
+
+}
 
 void updateRightEncoder(){
     if(digitalRead(rightEncoder->getA()) == HIGH){

@@ -65,7 +65,7 @@ class Processor:
         if area <= 0:
             return False
 
-        contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+       	_, contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         currArea = 0
         for contour in contours:
             currArea += cv2.contourArea(contour)
@@ -133,7 +133,7 @@ class Processor:
 
         maskFinal = maskBlue + maskGreen + maskRed
 
-        contours, hierarchy = cv2.findContours(maskFinal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, _ = cv2.findContours(maskFinal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         newImg = cv2.cvtColor(newImg, cv2.COLOR_HSV2BGR)
 
         rodPoints = []
@@ -175,4 +175,4 @@ class Processor:
 
             redRods = self.getColorPosition(unwarpedRedMask, "r", stacks)
 
-        return stacks, unwarped
+        return stacks, newImg

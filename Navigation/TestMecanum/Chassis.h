@@ -12,6 +12,7 @@ public:
     void setVelocities(double vX, double vY);
     void stop();
     void setTargetHeading(double heading);
+    void turnToAngle(double angle);
     void driveXAxisDistance(double distance);
     void driveYAxisDistance(double distance);
     void moveXBlack(bool untilBlackIsFound);

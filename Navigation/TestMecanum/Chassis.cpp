@@ -1,9 +1,5 @@
 #include "Chassis.h"
 
-void updateRightEncoder();
-void updateLeftEncoder();
-
-
 Chassis::Chassis(){
     topLeft = new Motor(9,8);
     topRight = new Motor(4,5);
@@ -28,9 +24,9 @@ void Chassis::setVelocities(double vX, double vY){
     PIDConfig config = headingController->getPIDConfig();
 
     if(vY > 0){
-        config.p = 0.010;
+        config.p = 0.0125;
     }else{
-        config.p = 0.030;
+        config.p = 0.035;
     }
     headingController->setPIDConfig(config);
     update();
@@ -44,18 +40,24 @@ void Chassis::stop(){
     values.motorTopLeftSpeed = 0;
     values.motorTopRightSpeed = 0;
     writeMotors(values);
-}
+};
 
 
 void Chassis::setTargetHeading(double heading){
     headingController->setSetpoint(heading);
     update();
-}
+};
 
-void Chassis::update(){
-    headingController->setReference(gyro->getYaw());
-    currentAngularSpeed = headingController->getOutput();
-}
+void Chassis::turnToAngle(double angle){
+    double error = gyro->getYaw() - angle;
+    while(abs(error) >= 1){
+        error = gyro->getYaw() - angle;
+        setTargetHeading(angle);
+        setVelocities(0,0);
+        Serial.println(error);
+    }
+    stop();
+};
 
 void Chassis::driveXAxisDistance(double distance){
     bottomLeft->setPosition(0);
@@ -72,7 +74,7 @@ void Chassis::driveXAxisDistance(double distance){
         setVelocities(0.6 * multiplier, 0);
     }
     stop();
-}
+};
 
 void Chassis::driveYAxisDistance(double distance){
     bottomLeft->setPosition(0);
@@ -89,7 +91,12 @@ void Chassis::driveYAxisDistance(double distance){
         setVelocities(0, 0.6 * multiplier);
     }
     stop();
-}
+};
+
+void Chassis::update(){
+    headingController->setReference(gyro->getYaw());
+    currentAngularSpeed = headingController->getOutput();
+};
 
 void Chassis::writeMotors(MecanumMotorValues values){
   topLeft->set(values.motorTopLeftSpeed);

@@ -3,20 +3,15 @@
 void updateRightEncoder();
 void updateLeftEncoder();
 
-Encoder *rightEncoder;
-Encoder *leftEncoder; 
 
 Chassis::Chassis(){
     topLeft = new Motor(9,8);
     topRight = new Motor(4,5);
-    bottomLeft = new Motor(11,10);
-    bottomRight = new Motor(6,7);
+    bottomLeft = new Motor(11, 10, 2, 3);
+    bottomRight = new Motor(6, 7, 19, 18);
 
-    rightEncoder = new Encoder(2, 3);
-    leftEncoder = new Encoder(19, 18); 
-
-    attachInterrupt(rightEncoder->getA(),updateRightEncoder,FALLING);
-    attachInterrupt(leftEncoder->getA(),updateLeftEncoder,FALLING);
+    bottomLeft->setPulsePerRotation(2249);
+    bottomRight->setPulsePerRotation(2249);
 
     kinematics = new Mecanum(.8, 1, 0.028);
     gyro = &Gyro::getInstance();
@@ -33,14 +28,24 @@ void Chassis::setVelocities(double vX, double vY){
     PIDConfig config = headingController->getPIDConfig();
 
     if(vY > 0){
-        config.p = 0.015;
+        config.p = 0.010;
     }else{
-        config.p = 0.025;
+        config.p = 0.030;
     }
     headingController->setPIDConfig(config);
     update();
     writeMotors(kinematics->calcInverseKinematics(vX,vY,currentAngularSpeed));
 };
+
+void Chassis::stop(){
+    MecanumMotorValues values;
+    values.motorBottomLeftSpeed = 0;
+    values.motorBottomRightSpeed = 0;
+    values.motorTopLeftSpeed = 0;
+    values.motorTopRightSpeed = 0;
+    writeMotors(values);
+}
+
 
 void Chassis::setTargetHeading(double heading){
     headingController->setSetpoint(heading);
@@ -53,37 +58,37 @@ void Chassis::update(){
 }
 
 void Chassis::driveXAxisDistance(double distance){
-    leftEncoder->setPosition(0);
-    rightEncoder->setPosition(0);
+    bottomLeft->setPosition(0);
+    bottomRight->setPosition(0);
     double xDistanceTraveled = 0;
     double multiplier = 1;
     if(distance < 0){
         multiplier = -1;
     }
     while(abs(xDistanceTraveled) < abs(distance)){
-        double rotations = (abs(leftEncoder->getRotations()) + abs(rightEncoder->getRotations())) / 2.0;
+        double rotations = (abs(bottomLeft->getRotations()) + abs(bottomRight->getRotations())) / 2.0;
         xDistanceTraveled = rotations * METERS_PER_ROT;
 
-        setVelocities(0.3 * multiplier, 0);
+        setVelocities(0.6 * multiplier, 0);
     }
-    setVelocities(0, 0);
+    stop();
 }
 
 void Chassis::driveYAxisDistance(double distance){
-    leftEncoder->setPosition(0);
-    rightEncoder->setPosition(0);
+    bottomLeft->setPosition(0);
+    bottomRight->setPosition(0);
     double yDistanceTraveled = 0;
     double multiplier = 1;
     if(distance < 0){
         multiplier = -1;
     }
     while(abs(yDistanceTraveled) < abs(distance)){
-        double rotations = (abs(leftEncoder->getRotations()) + abs(rightEncoder->getRotations())) / 2.0;
-        yDistanceTraveled = (rotations * METERS_PER_ROT) / 2.0;
+        double rotations = (abs(bottomLeft->getRotations()) + abs(bottomRight->getRotations())) / 2.0;
+        yDistanceTraveled = (rotations * METERS_PER_ROT);
 
-        setVelocities(0, 0.3 * multiplier);
+        setVelocities(0, 0.6 * multiplier);
     }
-    setVelocities(0, 0);
+    stop();
 }
 
 void Chassis::writeMotors(MecanumMotorValues values){
@@ -92,40 +97,3 @@ void Chassis::writeMotors(MecanumMotorValues values){
   bottomLeft->set(values.motorBottomLeftSpeed);
   bottomRight->set(values.motorBottomRightSpeed);
 };
-
-
-void updateRightEncoder(){
-    if(digitalRead(rightEncoder->getA()) == HIGH){
-        if(digitalRead(rightEncoder->getB()) == LOW){
-            rightEncoder->decrease();
-        }
-        else{
-            rightEncoder->increase();
-        }
-    }else{
-        if(digitalRead(rightEncoder->getB()) == LOW){
-            rightEncoder->increase();
-        }
-        else{
-            rightEncoder->decrease();
-        }
-    }
-}
-
-void updateLeftEncoder(){
-    if(digitalRead(leftEncoder->getA()) == HIGH){
-        if(digitalRead(leftEncoder->getB()) == LOW){
-            leftEncoder->decrease();
-        }
-        else{
-            leftEncoder->increase();            
-        }
-    }else{
-        if(digitalRead(leftEncoder->getB()) == LOW){
-            leftEncoder->increase();
-        }
-        else{
-            leftEncoder->decrease();
-        }
-    }
-}

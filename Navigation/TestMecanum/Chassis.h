@@ -4,12 +4,13 @@
 #include "Mecanum.h"
 #include "Gyro.h"
 #include "PID.h"
-#include "Encoder.h"
+#include <Encoder.h>
 
 class Chassis {
 public:
     Chassis();
     void setVelocities(double vX, double vY);
+    void stop();
     void setTargetHeading(double heading);
     void driveXAxisDistance(double distance);
     void driveYAxisDistance(double distance);

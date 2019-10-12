@@ -3,6 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
+                "/home/alberto/Arduino/libraries/Encoder",
                 "/home/alberto/Downloads/arduino-1.8.9-linux64/arduino-1.8.9/tools/**",
                 "/home/alberto/Downloads/arduino-1.8.9-linux64/arduino-1.8.9/hardware/arduino/avr/**",
                 "/home/alberto/Documents/Gits/LARC-Cerebrum/Navigation/TestMecanum/*.h"

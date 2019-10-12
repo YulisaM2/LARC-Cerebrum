@@ -2,19 +2,22 @@
 #define _MOTOR_H
 
 #include <Arduino.h>
+#include <Encoder.h>
 
 class Motor{
 	public:
 		Motor(int a, int b);
 		Motor(int a, int b, int encoderPortA, int encoderPortB);
-	
 		void set(double value);
+		int getPosition();
+		void setPosition(int pos);
+		double getRotations();
+		void setPulsePerRotation(int pulsePerRot);
 	private:
 		int a;
 		int b;	
-		int encoderPortA = 0;
-		int encoderPortB = 0;
-		int encoderCounter = 0;
+		int pulsePerRot = 1;
+		Encoder *encoder = nullptr;
 };
 
 #endif

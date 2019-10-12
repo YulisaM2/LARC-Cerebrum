@@ -23,7 +23,7 @@ void Bicho::followPath(const Path& path){
                 moveX(-14);
             }
 
-            if(position.getX() == 0 && coord.getX() == 1{
+            if(position.getX() == 0 && coord.getX() == 1){
 
             }
 

@@ -21,7 +21,8 @@ Chassis::Chassis(){
     kinematics = new Mecanum(.8, 1, 0.028);
     gyro = &Gyro::getInstance();
     PIDConfig headingControllerConfig;
-    headingControllerConfig.p = 0.03;
+    headingControllerConfig.p = 0.02;
+    headingControllerConfig.d = 0.075;
     headingControllerConfig.maxInput = 180;
     headingControllerConfig.minInput = -180;
     headingControllerConfig.continous = true;
@@ -29,6 +30,14 @@ Chassis::Chassis(){
 };
 
 void Chassis::setVelocities(double vX, double vY){
+    PIDConfig config = headingController->getPIDConfig();
+
+    if(vY > 0){
+        config.p = 0.015;
+    }else{
+        config.p = 0.025;
+    }
+    headingController->setPIDConfig(config);
     update();
     writeMotors(kinematics->calcInverseKinematics(vX,vY,currentAngularSpeed));
 };
@@ -84,13 +93,6 @@ void Chassis::writeMotors(MecanumMotorValues values){
   bottomRight->set(values.motorBottomRightSpeed);
 };
 
-void Chassis::moveXUntilBlack(bool untilBlackIsFound){
-
-}
-
-void Chassis::moveYUntilBlack(bool untilBlackIsFound){
-
-}
 
 void updateRightEncoder(){
     if(digitalRead(rightEncoder->getA()) == HIGH){

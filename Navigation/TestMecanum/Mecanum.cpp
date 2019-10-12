@@ -14,10 +14,10 @@ Mecanum::Mecanum(double a,double b, double wheelRadius){
 MecanumMotorValues Mecanum::calcInverseKinematics(double vX, double vY, double w){
 	MecanumMotorValues values;
 
-	values.motorTopRightSpeed = vX + vY + (a*w)+ (b*w);
-	values.motorTopLeftSpeed = vX - vY - (a*w) - (b*w);
-	values.motorBottomRightSpeed = vX - vY + (a*w) + (b*w);
-	values.motorBottomLeftSpeed = vX + vY - (a*w) - (b*w);
+	values.motorTopRightSpeed = vX - vY + w;
+	values.motorTopLeftSpeed = vX + vY - w;
+	values.motorBottomRightSpeed = vX + vY + w;
+	values.motorBottomLeftSpeed = vX - vY - w;
 	return values;
 
 };

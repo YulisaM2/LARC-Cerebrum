@@ -34,7 +34,7 @@ void Gyro::updateValues(){
 
 int Gyro::getYaw(){
   	updateValues();
-	return yaw;
+	return -yaw;
 }
 
 int Gyro::getPitch(){

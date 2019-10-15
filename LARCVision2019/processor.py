@@ -65,7 +65,7 @@ class Processor:
         if area <= 0:
             return False
 
-       	_, contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         currArea = 0
         for contour in contours:
             currArea += cv2.contourArea(contour)
@@ -100,7 +100,7 @@ class Processor:
     def process(self, img):
         newImg = img.copy()
         newImg = cv2.blur(newImg, (5, 5))
-        stacks = [["", "", "", ""], ["", "", "", ""]]
+        stacks = [["r", "r", "r", "r"], ["r", "r", "r", "r"]]
 
         newImg = cv2.cvtColor(newImg, cv2.COLOR_BGR2HSV)
 
@@ -112,11 +112,17 @@ class Processor:
         self.thresholdBlue[1][1] = threshTable.getNumber("up_s", self.thresholdBlue[1][1])
         self.thresholdBlue[1][2] = threshTable.getNumber("up_v", self.thresholdBlue[1][2])
 
+        heightOffset = 35
+        widthOffset = 53
+        thresholdArea = newImg.copy()[heightOffset:newImg.shape[0], widthOffset:newImg.shape[1]]
+
+        cv2.imshow("TH AREA", thresholdArea)
+
         # Range for lower red
-        maskLowerRed = cv2.inRange(newImg, self.thresholdRed[0], self.thresholdRed[1])
+        maskLowerRed = cv2.inRange(thresholdArea, self.thresholdRed[0], self.thresholdRed[1])
 
         # Range for upper range
-        maskUpperRed = cv2.inRange(newImg, self.thresholdRed[2], self.thresholdRed[3])
+        maskUpperRed = cv2.inRange(thresholdArea, self.thresholdRed[2], self.thresholdRed[3])
 
         # Generating the final mask to detect red color
         maskRed = maskLowerRed + maskUpperRed
@@ -124,16 +130,16 @@ class Processor:
         # cv2.imshow('Rojo', maskRed)
 
         # Adding green mask
-        maskGreen = cv2.inRange(newImg, self.thresholdGreen[0], self.thresholdGreen[1])
+        maskGreen = cv2.inRange(thresholdArea, self.thresholdGreen[0], self.thresholdGreen[1])
         # cv2.imshow('Verde', maskGreen)
 
         # Adding blue mask
-        maskBlue = cv2.inRange(newImg, self.thresholdBlue[0], self.thresholdBlue[1])
+        maskBlue = cv2.inRange(thresholdArea, self.thresholdBlue[0], self.thresholdBlue[1])
         # cv2.imshow("Azul", maskBlue)
 
         maskFinal = maskBlue + maskGreen + maskRed
 
-        _, contours, _ = cv2.findContours(maskFinal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(maskFinal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         newImg = cv2.cvtColor(newImg, cv2.COLOR_HSV2BGR)
 
         rodPoints = []
@@ -150,8 +156,15 @@ class Processor:
             # Filter unnecessary areas such as stacks that are behind and the floor's lines
             if area / (newImg.shape[0] * newImg.shape[1]) * 100 > self.percentageArea and width / img.shape[
                 1] * 100 > self.percentageWidth:
-                cv2.drawContours(newImg, [contour], 0, (0, 255, 0), 2)
-                rodPoints.extend(np.vstack(contour).squeeze().tolist())
+
+                pointsToAdd = np.vstack(contour).squeeze().tolist()
+                for i in range(0, len(pointsToAdd)):
+                    pointsToAdd[i][0] = pointsToAdd[i][0] + widthOffset
+                    pointsToAdd[i][1] = pointsToAdd[i][1] + heightOffset
+                    # print(pointsToAdd[i])
+
+                cv2.drawContours(newImg, np.array([pointsToAdd]), 0, (0, 255, 0), 2)
+                rodPoints.extend(pointsToAdd)
 
         unwarped = np.zeros(shape=[img.shape[0], img.shape[1], 3], dtype=np.uint8)
 

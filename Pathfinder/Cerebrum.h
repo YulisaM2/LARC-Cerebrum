@@ -17,6 +17,8 @@ enum class Command{
 
 struct Action{
     Path path;
+    Coord destination;
+    Coord currPosition;
     Command command;
     int height = 0;
 };

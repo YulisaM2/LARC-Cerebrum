@@ -31,8 +31,8 @@ void followPath(DriveTrain &driveTrain, const Path &path){
 
 void setup(){
     Serial.begin(9600);
-    Serial.print("freeMemory()=");
-    Serial.println(freeMemory());
+//    Serial.print("freeMemory()=");
+//    Serial.println(freeMemory());
     
     DriveTrain driveTrain(Coord(3,0));
     Cerebrum cerebrum(driveTrain);
@@ -90,8 +90,8 @@ void setup(){
         cerebrum.printStacks();
         Action action = cerebrum.getCurrentAction();
         followPath(driveTrain, action.path);
-        Serial.print("freeMemory()=");
-        Serial.println(freeMemory());
+//        Serial.print("freeMemory()=");
+//        Serial.println(freeMemory());
         switch(action.command){
             case Command::TakePictures:
                     Serial.println("Taking a picture !");

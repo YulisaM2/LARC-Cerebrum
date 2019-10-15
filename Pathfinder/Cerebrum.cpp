@@ -46,6 +46,7 @@ Action Cerebrum::getCurrentAction(){
             }else{
                 state = CerebrumState::Finished;
                 currentAction.path = aStar.getPath(driveTrain, Coord(3,0), field);
+                Serial.println("End Match");
                 currentAction.command = Command::Move;
                 finished = true;
             }
@@ -112,7 +113,8 @@ Action Cerebrum::getCurrentAction(){
             break;
         }
     }
-
+    currentAction.currPosition = driveTrain;
+    currentAction.destination = currentAction.path.getCoordAt(currentAction.path.getLength() - 1);
     return currentAction;
 };
 

@@ -22,11 +22,33 @@ Field::Field(){
 
     for(int i = 0; i < 7; ++i){
         for(int j = 0; j < 1; ++j){
+
+
+            if(i - 1 == 3 && j == 0 ){
+                continue;
+
+            }
+
+           if(i + 1 == 3 && j == 0 ){
+                continue;
+
+            }
+
             if(i - 1 >= 0){
+                Serial.println("En el del uno ");
+                Serial.print(i - 1);
+                Serial.print(" ");
+                Serial.println(j);
+
                 matrix[i][j]->addNeighbor(matrix[i - 1][j]);
             }
 
             if(i + 1 <= 6){
+                Serial.println(" EN el del seis ");
+                Serial.print(i + 1);
+                Serial.print(" ");
+                Serial.println(j);
+
                 matrix[i][j]->addNeighbor(matrix[i + 1][j]);
             }
         }
@@ -50,8 +72,8 @@ Field::Field(){
     matrix[0][1]->addNeighbor(matrix[2][1]);
     matrix[2][1]->addNeighbor(matrix[0][1]);
 
-    matrix[2][1]->addNeighbor(matrix[3][0]);
-    matrix[3][0]->addNeighbor(matrix[2][1]);
+    // matrix[2][1]->addNeighbor(matrix[3][0]);
+    // matrix[3][0]->addNeighbor(matrix[2][1]);
 
     matrix[2][1]->addNeighbor(matrix[1][2]);
     matrix[1][2]->addNeighbor(matrix[2][1]);
@@ -62,8 +84,8 @@ Field::Field(){
     matrix[1][2]->addNeighbor(matrix[1][3]);
     matrix[1][3]->addNeighbor(matrix[1][2]);
 
-    matrix[3][0]->addNeighbor(matrix[4][1]);
-    matrix[4][1]->addNeighbor(matrix[3][0]);
+    // matrix[3][0]->addNeighbor(matrix[4][1]);
+    // matrix[4][1]->addNeighbor(matrix[3][0]);
 
     matrix[4][1]->addNeighbor(matrix[6][1]);
     matrix[6][1]->addNeighbor(matrix[4][1]);
@@ -73,6 +95,9 @@ Field::Field(){
 
     matrix[5][3]->addNeighbor(matrix[5][2]);
     matrix[5][2]->addNeighbor(matrix[5][3]);
+
+
+    printField();
 };
 
 void Field::printField(){
